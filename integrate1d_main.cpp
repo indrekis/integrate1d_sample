@@ -62,6 +62,8 @@ int main(int argc, char* argv[])
         return 3;
     }
 
+    std::cout << "0" << std::endl; // Вивести варіант
+
     auto before = get_current_time_fenced();
 
     size_t steps = config_ptr->initial_steps;
