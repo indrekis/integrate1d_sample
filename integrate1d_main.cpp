@@ -25,10 +25,10 @@ double integrate(func_T func, double x1, const double& x2, size_t steps)
     double delta_x = (x2 - x1)/steps; //-V113 // PVS studio warning here is a false positive
     while(x1<x2)
     {
-        res += func(x1) * delta_x;
+        res += func(x1);
         x1 += delta_x;
     }
-    return res;
+    return res * delta_x;
 }
 
 
