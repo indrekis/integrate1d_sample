@@ -14,6 +14,18 @@
 #include "integrate1d_conf.hpp"
 
 
+//! Scoped enum (enum class) мав би тут певні переваги, наприклад, кодам помилок можна було б
+//! давати  короткі імена (оскільки, вони не потрапляють в охоплюючу оголошення enum область видимості).
+//! Однак, він не конвертується неявно в int -- повертати з main() стає громіздко і незручно.
+enum I2D_error_codes_t{
+    I2D_err_OK = 0,
+    I2D_err_wrong_cmd_args = 1,
+    I2D_err_wrong_fn_idx = 2,
+    I2D_err_failed_open_config = 3,
+    I2D_err_failed_reading_config = 5,
+    I2D_err_too_many_iters = 16,
+};
+
 double func_to_integrate(const double& x) {
     return x*x;
 }
@@ -43,23 +55,24 @@ int main(int argc, char* argv[])
                 "<program>\n"
                 "or\n"
                 "<program> <config-filename>\n" << std::endl;
-        return 1;
+        return I2D_err_wrong_cmd_args;
     }
     std::ifstream config_stream(filename);
     if(!config_stream.is_open()) {
         std::cerr << "Failed to open configuration file " << filename << std::endl;
-        return 2;
+        return I2D_err_wrong_fn_idx;
     }
 
-    std::unique_ptr<integrate1d_conf> config_ptr; // Вказівник -- щоб забезпечити потрібну оброку помилок (return 3 тут),
-                                                  // але не загортати в try-catch все тіло програми нижче.
-                                                  // А розумний -- щоб потім не звільняти.
+    std::unique_ptr<integrate1d_conf> config_ptr;
+                // Вказівник -- щоб забезпечити потрібну оброку помилок (тут це return <code>),
+                // але не загортати в try-catch все тіло програми нижче.
+                // А розумний -- щоб потім не звільняти.
     try{
         config_ptr = std::make_unique<integrate1d_conf>(config_stream);
     }catch (std::exception& ex)
     {
         std::cerr << "Error: " << ex.what() << std::endl;
-        return 3;
+        return I2D_err_failed_open_config;
     }
 
     std::cout << "0" << std::endl; // Вивести варіант
@@ -106,7 +119,7 @@ int main(int argc, char* argv[])
 #endif
     if( ( abs_err > config_ptr->abs_err ) && ( rel_err > config_ptr->rel_err ) ){
         std::cerr << "Requested errors not reached within allowed iterations limit" << std::endl;
-        return 100;
+        return I2D_err_failed_reading_config;
     }
-    return 0;
+    return I2D_err_OK;
 }
