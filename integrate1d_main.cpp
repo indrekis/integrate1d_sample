@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
         return I2D_err_wrong_cmd_args;
     }
     std::ifstream config_stream(filename);
-    if(!config_stream.is_open()) {
+    if(!config_stream) {
         std::cerr << "Failed to open configuration file " << filename << std::endl;
         return I2D_err_wrong_fn_idx;
     }
