@@ -19,5 +19,10 @@ inline long long to_us(const D& d)
     return std::chrono::duration_cast<std::chrono::microseconds>(d).count();
 }
 
+template<class D>
+inline long long to_ms(const D& d)
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(d).count();
+}
 
 #endif //TEST_TIME_MEASUREMENTS_HPP

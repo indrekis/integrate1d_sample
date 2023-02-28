@@ -45,6 +45,7 @@ double integrate(func_T func, double x1, const double& x2, size_t steps)
 
 
 //! Якщо передано ім'я файлу -- він використовується. Якщо ні -- шукається файл іменем integration_1d.cfg.
+//! Увага, аргументи командного рядка відрізняються від описаних в завдання -- тут лише одна функція для інтегрування.
 int main(int argc, char* argv[])
 {
     std::string filename("integration_1d.cfg");
@@ -74,8 +75,6 @@ int main(int argc, char* argv[])
         std::cerr << "Error: " << ex.what() << std::endl;
         return I2D_err_failed_open_config;
     }
-
-    std::cout << "0" << std::endl; // Вивести варіант
 
     auto before = get_current_time_fenced();
 
@@ -110,12 +109,12 @@ int main(int argc, char* argv[])
     std::cout << "Result = " << cur_res << std::endl;
     std::cout << "Abs err = " << abs_err << std::endl;
     std::cout << "rel err = " << rel_err << std::endl;
-    std::cout << "Time: " << to_us(time_to_calculate)  << std::endl;
+    std::cout << "Time: " << to_ms(time_to_calculate)  << std::endl;
 #else
     std::cout << cur_res << std::endl;
     std::cout << abs_err << std::endl;
     std::cout << rel_err << std::endl;
-    std::cout << to_us(time_to_calculate)  << std::endl;
+    std::cout << to_ms(time_to_calculate)  << std::endl;
 #endif
     if( ( abs_err > config_ptr->abs_err ) && ( rel_err > config_ptr->rel_err ) ){
         std::cerr << "Requested errors not reached within allowed iterations limit" << std::endl;
