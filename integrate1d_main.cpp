@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 #endif
     if( ( abs_err > config_ptr->abs_err ) && ( rel_err > config_ptr->rel_err ) ){
         std::cerr << "Requested errors not reached within allowed iterations limit" << std::endl;
-        return I2D_err_failed_reading_config;
+        return I2D_err_too_many_iters;
     }
     return I2D_err_OK;
 }

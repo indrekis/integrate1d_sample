@@ -62,7 +62,8 @@ void integrate1d_conf::read_conf(std::istream& cf)
     initial_steps = get_option_from_map<decltype(initial_steps)>("init_steps"s);
     max_iters = get_option_from_map<decltype(initial_steps)>("max_iter"s);
     max_steps = initial_steps * (2ull << max_iters); // ull тут важливий, без того (2 << ...) матиме тип int,
-                                    // коректіше було б static_cast<size_t>(2) писати -- но то якось дуже вже канцелярит.
+                            // коректніше було б static_cast<size_t>(2) писати (до появи літералу 2zu в C++23),
+                            // але це якось дуже вже канцелярит.
 
     validate_conf();
 }
