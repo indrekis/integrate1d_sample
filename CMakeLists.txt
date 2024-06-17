@@ -72,7 +72,21 @@ find_package(Boost 1.71.0 COMPONENTS program_options system REQUIRED)
 target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} Boost::program_options Boost::system)
 
-						
+find_package(OpenMP) # Clang requires libomp-dev to support OpenMP
+if(OpenMP_CXX_FOUND)
+add_executable(${PROJECT_NAME}_omp integrate1d_omp_main.cpp
+		string_tools.cpp string_tools.hpp
+		time_measurements.hpp
+		integrate1d_conf.cpp integrate1d_conf.hpp)
+target_include_directories(${PROJECT_NAME} PRIVATE options_parser)
+
+target_include_directories(${PROJECT_NAME}_omp PRIVATE ${Boost_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME}_omp Boost::program_options Boost::system)
+target_link_libraries(${PROJECT_NAME}_omp OpenMP::OpenMP_CXX)
+endif()
+
+
+
 ##########################################################
 # Fixed CMakeLists.txt part 
 ##########################################################

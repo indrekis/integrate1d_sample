@@ -8,6 +8,8 @@
 #include <exception>
 #include <stdexcept>
 
+// #define PRINT_INTERMEDIATE_STEPS
+
 #ifdef PRINT_INTERMEDIATE_STEPS
 #include <iostream>
 #endif
@@ -86,8 +88,8 @@ void print_type() { std::cout << __PRETTY_FUNCTION__ << '\n'; }
 #endif
 #endif
 
-// Насправді, цей метод приватни, використовується лише в реалізації цього класу,
-// і її варто в .cpp файл -- но студенти ж копіювати почнуть...
+// Насправді, цей метод приватний, використовується лише в реалізації цього класу,
+// і її варто в .cpp файл -- але студенти ж копіювати почнуть...
 template<typename T>
 T integrate1d_conf::get_option_from_map(const std::string& option_name) const{
     if( options_map.count(option_name) == 0 ){

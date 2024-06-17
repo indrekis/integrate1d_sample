@@ -35,22 +35,13 @@ double integrate(func_T func, double x1, double x2, size_t steps)
 {
     double res = 0;
     double delta_x = (x2 - x1)/steps; //-V113 // PVS studio warning here is a false positive
-    for(size_t i = 0; i<steps; ++i) {
+#pragma omp parallel for reduction (+:res)
+    for(int64_t i = 0; i<steps; ++i) { // MSVC не хоче паралелізувати for з беззнаковим типом (OMP 2.0...)
         res += func(x1 + i*delta_x);
     }
-
-    // 1. Такий Варіант з while має більшу похибку -- різниця кінцевих значень досягала 10^{-6} для великої кількості
-    //    ітерацій.
-    // 2. OpenMP такий цикл важче розпаралелювати.
-#if 0
-    while(x1<x2)
-    {
-        res += func(x1);
-        x1 += delta_x;
-    }
-#endif
     return res * delta_x;
 }
+
 
 //! Якщо передано ім'я файлу -- він використовується. Якщо ні -- шукається файл іменем integration_1d.cfg.
 //! Увага, аргументи командного рядка відрізняються від описаних в завдання -- тут лише одна функція для інтегрування.
